@@ -5,68 +5,58 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#3B2A1A">
 <title>호인플로링 견적서</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#F5F0E8;
-  --surface:#FDFAF6;
-  --border:#DDD0BC;
-  --accent:#3B2A1A;
-  --accent2:#6B4C2A;
-  --accent-lt:#F0E8D8;
-  --gold:#C8922A;
-  --gold-lt:#FDF3E0;
-  --text:#1E1610;
-  --muted:#8C7B6B;
-  --danger:#C0392B;
-  --radius:10px;
+  --bg:#F5F0E8;--surface:#FDFAF6;--border:#DDD0BC;
+  --accent:#3B2A1A;--accent2:#6B4C2A;--accent-lt:#F0E8D8;
+  --gold:#C8922A;--gold-lt:#FDF3E0;
+  --text:#1E1610;--muted:#8C7B6B;--danger:#C0392B;--radius:10px;
+  --font:'Pretendard','Apple SD Gothic Neo',sans-serif;
 }
-body{background:var(--bg);font-family:'Apple SD Gothic Neo',Arial,sans-serif;color:var(--text);font-size:14px;line-height:1.5}
+body{background:var(--bg);font-family:var(--font);color:var(--text);font-size:14px;line-height:1.5}
 
-/* ── 앱 헤더 */
 .app-header{
   background:linear-gradient(135deg,#2C1A0E 0%,#3B2A1A 60%,#4A3320 100%);
   padding:14px 18px;display:flex;align-items:center;gap:14px;
-  position:sticky;top:0;z-index:100;
-  box-shadow:0 2px 12px rgba(0,0,0,.35);
+  position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.35);
 }
 .header-logo{width:56px;height:56px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 2px 4px rgba(0,0,0,.4))}
 .header-info{flex:1}
-.brand-name{font-size:19px;font-weight:800;color:#FDFAF6;letter-spacing:-0.5px;line-height:1.1}
-.brand-sub{font-size:10px;color:#C8A87A;margin-top:2px;letter-spacing:.05em}
-.header-contacts{display:flex;flex-direction:column;align-items:flex-end;gap:2px}
-.header-tel{font-size:12px;color:var(--gold);font-weight:600;white-space:nowrap}
-.header-mobile{font-size:12px;color:#C8A87A;white-space:nowrap}
+.brand-name{font-size:20px;font-weight:800;color:#FDFAF6;letter-spacing:-0.5px;line-height:1.1}
+.brand-sub{font-size:10px;color:#C8A87A;margin-top:2px;letter-spacing:.05em;font-weight:400}
+.header-contacts{display:flex;flex-direction:column;align-items:flex-end;gap:3px}
+.header-tel{font-size:12px;color:var(--gold);font-weight:700;white-space:nowrap}
+.header-mobile{font-size:11px;color:#C8A87A;white-space:nowrap;font-weight:400}
 
-/* ── 탭 */
 .tab-bar{display:flex;background:var(--surface);border-bottom:2px solid var(--border);padding:0 16px}
-.tab-btn{flex:1;padding:12px 0;font-size:14px;font-weight:600;background:none;border:none;border-bottom:3px solid transparent;color:var(--muted);cursor:pointer;transition:all .2s;margin-bottom:-2px}
+.tab-btn{flex:1;padding:12px 0;font-size:14px;font-weight:600;background:none;border:none;border-bottom:3px solid transparent;color:var(--muted);cursor:pointer;transition:all .2s;margin-bottom:-2px;font-family:var(--font)}
 .tab-btn.active{color:var(--accent);border-bottom-color:var(--gold)}
 
-/* ── 섹션 */
 .content{padding:16px;max-width:640px;margin:0 auto}
 .section{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:14px;box-shadow:0 1px 4px rgba(59,42,26,.06)}
 .section-label{font-size:11px;font-weight:700;color:var(--accent2);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px;padding-bottom:8px;border-bottom:1.5px solid var(--accent-lt);display:flex;align-items:center;gap:6px}
 .section-label::before{content:'';display:inline-block;width:3px;height:13px;background:var(--gold);border-radius:2px}
 
-/* ── 인풋 */
 .field{margin-bottom:12px}
 .field label{display:block;font-size:12px;color:var(--muted);font-weight:600;margin-bottom:4px}
-.field input,.field select,.field textarea{width:100%;border:1px solid var(--border);border-radius:7px;padding:9px 12px;font-size:14px;color:var(--text);background:var(--surface);outline:none;transition:border-color .15s;font-family:inherit}
+.field input,.field select,.field textarea{width:100%;border:1px solid var(--border);border-radius:7px;padding:9px 12px;font-size:14px;color:var(--text);background:var(--surface);outline:none;transition:border-color .15s;font-family:var(--font)}
 .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(200,146,42,.12)}
-.field textarea{resize:vertical;min-height:56px;line-height:1.5}
+.field textarea{resize:vertical;min-height:56px;line-height:1.6}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 
-/* ── 품목 테이블 */
 .items-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
 .items-table{width:100%;border-collapse:collapse;min-width:480px}
-.items-table th{background:var(--accent);color:#FDFAF6;font-size:11px;font-weight:600;padding:8px 5px;text-align:center;white-space:nowrap}
+.items-table th{background:var(--accent);color:#FDFAF6;font-size:11px;font-weight:700;padding:8px 5px;text-align:center;white-space:nowrap;font-family:var(--font)}
 .items-table th:first-child{border-radius:6px 0 0 0}
 .items-table th:last-child{border-radius:0 6px 0 0}
 .items-table td{border-bottom:1px solid var(--border);padding:3px 3px;vertical-align:middle}
 .items-table tr:nth-child(even) td{background:#FAF6EF}
-.items-table input{border:none;background:transparent;width:100%;font-size:13px;padding:4px 5px;color:var(--text);text-align:inherit;font-family:inherit;outline:none;border-radius:4px}
+.items-table input{border:none;background:transparent;width:100%;font-size:13px;padding:4px 5px;color:var(--text);text-align:inherit;font-family:var(--font);outline:none;border-radius:4px}
 .items-table input:focus{background:var(--gold-lt)}
 .items-table .num{text-align:right}
 .name-cell{display:flex;flex-direction:column;gap:1px}
@@ -74,42 +64,38 @@ body{background:var(--bg);font-family:'Apple SD Gothic Neo',Arial,sans-serif;col
 .spec-cell{display:flex;align-items:center;gap:2px;white-space:nowrap}
 .spec-cell input{width:36px!important;text-align:center;padding:4px 2px!important}
 .spec-cell input.spec-first{width:46px!important}
-.spec-sep{font-size:11px;color:var(--muted);flex-shrink:0}
+.spec-sep{font-size:11px;color:var(--muted);flex-shrink:0;font-weight:600}
 .amt-td{font-weight:700;color:var(--accent2);text-align:right;font-size:13px;padding:0 6px!important;white-space:nowrap}
 .del-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:15px;padding:3px 6px;border-radius:4px}
 .del-btn:hover{color:var(--danger);background:#FEF0EE}
-.add-item-btn{width:100%;margin-top:10px;padding:9px;border:1.5px dashed var(--border);border-radius:7px;background:none;color:var(--muted);font-size:13px;cursor:pointer;font-family:inherit;transition:.15s}
+.add-item-btn{width:100%;margin-top:10px;padding:9px;border:1.5px dashed var(--border);border-radius:7px;background:none;color:var(--muted);font-size:13px;cursor:pointer;font-family:var(--font);transition:.15s;font-weight:500}
 .add-item-btn:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-lt)}
 
-/* ── 추가비용 */
 .extra-row{display:flex;gap:8px;align-items:center;margin-bottom:8px}
-.extra-row input{flex:1;border:1px solid var(--border);border-radius:7px;padding:8px 10px;font-size:13px;font-family:inherit;outline:none;background:var(--surface)}
+.extra-row input{flex:1;border:1px solid var(--border);border-radius:7px;padding:8px 10px;font-size:13px;font-family:var(--font);outline:none;background:var(--surface)}
 .extra-row input:focus{border-color:var(--gold)}
 .extra-row .ex-amt{width:110px;text-align:right}
 .extra-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:15px;padding:4px 6px}
-.add-extra-btn{font-size:12px;color:var(--accent2);background:none;border:none;cursor:pointer;padding:2px 0;font-family:inherit}
+.add-extra-btn{font-size:12px;color:var(--accent2);background:none;border:none;cursor:pointer;padding:2px 0;font-family:var(--font);font-weight:600}
 
-/* ── 합계 */
 .totals{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:14px;box-shadow:0 1px 4px rgba(59,42,26,.06)}
 .total-row{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border)}
 .total-row:last-child{border-bottom:none}
 .total-row.main-total{background:var(--accent)}
 .total-row.gold-row{background:#2A1800}
-.total-label{font-size:13px;color:var(--muted)}
-.total-row.main-total .total-label,.total-row.gold-row .total-label{color:rgba(255,255,255,.65);font-weight:600}
+.total-label{font-size:13px;color:var(--muted);font-weight:500}
+.total-row.main-total .total-label,.total-row.gold-row .total-label{color:rgba(253,250,246,.65);font-weight:600}
 .total-value{font-size:15px;font-weight:700;color:var(--text)}
-.total-row.main-total .total-value{color:#FDFAF6;font-size:18px}
-.total-row.gold-row .total-value{color:var(--gold);font-size:18px}
+.total-row.main-total .total-value{color:#FDFAF6;font-size:18px;font-weight:800}
+.total-row.gold-row .total-value{color:var(--gold);font-size:18px;font-weight:800}
 
-/* ── 결제조건 */
 .cond-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--accent-lt);font-size:13px;flex-wrap:wrap}
 .cond-row:last-child{border-bottom:none;color:var(--accent);font-weight:700}
-.cond-num{color:var(--gold);font-weight:700;min-width:18px;flex-shrink:0}
-.cond-row select{border:1px solid var(--border);border-radius:5px;padding:4px 8px;font-size:13px;color:var(--text);background:var(--surface);font-family:inherit;outline:none}
+.cond-num{color:var(--gold);font-weight:800;min-width:18px;flex-shrink:0}
+.cond-row select{border:1px solid var(--border);border-radius:5px;padding:4px 8px;font-size:13px;color:var(--text);background:var(--surface);font-family:var(--font);outline:none}
 
-/* ── 버튼 */
 .btn-group{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
-.dl-btn{width:100%;padding:15px;background:var(--accent);color:#FDFAF6;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;font-family:inherit;transition:.15s}
+.dl-btn{width:100%;padding:15px;background:var(--accent);color:#FDFAF6;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;font-family:var(--font);transition:.15s;letter-spacing:-.3px}
 .dl-btn:hover{background:#2C1A0E}
 .dl-btn:active{transform:scale(.98)}
 .dl-btn.secondary{background:var(--accent-lt);color:var(--accent);border:1.5px solid var(--accent2)}
@@ -118,99 +104,76 @@ body{background:var(--bg);font-family:'Apple SD Gothic Neo',Arial,sans-serif;col
 .dl-btn.gold:hover{background:linear-gradient(135deg,#B07820,#C8922A)}
 .dl-btn.full{grid-column:1/-1}
 
-/* ── 로딩 */
 .loading{position:fixed;inset:0;background:rgba(44,26,14,.88);display:none;align-items:center;justify-content:center;z-index:9998;flex-direction:column;gap:16px}
 .loading.show{display:flex}
 .loading-spinner{width:44px;height:44px;border:4px solid rgba(255,255,255,.2);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite}
-.loading-text{color:#FDFAF6;font-size:14px;font-weight:600}
+.loading-text{color:#FDFAF6;font-size:14px;font-weight:600;font-family:var(--font)}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* ── 토스트 */
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--accent);color:#FDFAF6;padding:12px 24px;border-radius:30px;font-size:14px;font-weight:600;pointer-events:none;transition:transform .3s ease;z-index:9999;white-space:nowrap}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--accent);color:#FDFAF6;padding:12px 24px;border-radius:30px;font-size:14px;font-weight:600;pointer-events:none;transition:transform .3s ease;z-index:9999;white-space:nowrap;font-family:var(--font)}
 .toast.show{transform:translateX(-50%) translateY(0)}
 
-/* ════════════════════════════════
-   PDF · 이미지 견적서 레이아웃
-   ════════════════════════════════ */
+/* ══ PDF 레이아웃 ══ */
 #pdfView{display:none}
 
 .pdf-wrap{
-  width:794px;background:#FDFAF6;
-  padding:36px 44px 40px;
-  font-family:'Apple SD Gothic Neo',Arial,sans-serif;
+  width:794px;background:#FDFAF6;padding:36px 44px 40px;
+  font-family:'Pretendard','Apple SD Gothic Neo',sans-serif;
   font-size:10pt;color:#1E1610;
 }
-
-/* PDF 헤더 */
 .pdf-header{
   background:linear-gradient(135deg,#2C1A0E 0%,#3B2A1A 60%,#4A3320 100%);
   display:flex;align-items:center;gap:16px;
-  padding:16px 20px;border-radius:10px 10px 0 0;
+  padding:16px 22px;border-radius:10px 10px 0 0;
 }
 .pdf-header-logo{width:64px;height:64px;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,.4))}
 .pdf-header-brand{flex:1}
-.pdf-header-brand .bname{font-size:20pt;font-weight:800;color:#FDFAF6;letter-spacing:-0.5px;line-height:1.1}
-.pdf-header-brand .bsub{font-size:9pt;color:#C8A87A;margin-top:3px;letter-spacing:.05em}
-.pdf-header-contacts{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
-.pdf-header-contacts .tel{font-size:10.5pt;color:#C8922A;font-weight:700}
-.pdf-header-contacts .mobile{font-size:9.5pt;color:#C8A87A}
-
-/* 골드 라인 */
+.pdf-header-brand .bname{font-size:22pt;font-weight:800;color:#FDFAF6;letter-spacing:-0.5px;line-height:1.1}
+.pdf-header-brand .bsub{font-size:9pt;color:#C8A87A;margin-top:3px;letter-spacing:.05em;font-weight:400}
+.pdf-header-contacts{display:flex;flex-direction:column;align-items:flex-end;gap:5px}
+.pdf-header-contacts .tel{font-size:11pt;color:#C8922A;font-weight:700}
+.pdf-header-contacts .mobile{font-size:9.5pt;color:#C8A87A;font-weight:400}
 .pdf-gold-bar{height:4px;background:linear-gradient(90deg,#C8922A,#E8B84B,#C8922A);margin-bottom:20px}
+.pdf-doc-title{font-size:26pt;font-weight:900;color:#3B2A1A;text-align:center;letter-spacing:-1.5px;padding:10px 0 14px;border-bottom:1.5px solid #DDD0BC;margin-bottom:16px}
 
-/* 제목 */
-.pdf-doc-title{
-  font-size:24pt;font-weight:900;color:#3B2A1A;
-  text-align:center;letter-spacing:-1px;
-  padding:10px 0 14px;
-  border-bottom:1.5px solid #DDD0BC;margin-bottom:16px;
-}
-
-/* 기본정보 */
 .pdf-info-table{width:100%;border-collapse:collapse;margin-bottom:14px;font-size:9.5pt}
 .pdf-info-table td{padding:6px 10px;border:0.5px solid #DDD0BC;vertical-align:middle}
 .pdf-info-table .lbl{background:#F0E8D8;color:#6B4C2A;font-weight:700;width:12%;text-align:center;white-space:nowrap}
 
-/* 세후금액 강조 */
 .pdf-total-hero{display:flex;align-items:center;margin-bottom:8px;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(59,42,26,.15)}
 .pdf-total-hero .lbl{background:linear-gradient(135deg,#2C1A0E,#3B2A1A);color:#C8A87A;font-weight:700;font-size:11pt;padding:14px 20px;white-space:nowrap}
-.pdf-total-hero .val{flex:1;text-align:right;font-size:20pt;font-weight:900;color:#3B2A1A;padding:14px 20px;background:#F0E8D8}
+.pdf-total-hero .val{flex:1;text-align:right;font-size:22pt;font-weight:900;color:#3B2A1A;padding:14px 20px;background:#F0E8D8;letter-spacing:-1px}
 .pdf-hangul{font-size:8.5pt;color:#8C7B6B;text-align:right;margin-bottom:16px;padding-right:4px}
 
-/* 품목 */
 .pdf-items{width:100%;border-collapse:collapse;margin-bottom:4px;font-size:9pt}
 .pdf-items th{background:#3B2A1A;color:#FDFAF6;padding:7px 8px;text-align:center;font-weight:700}
 .pdf-items td{border:0.5px solid #DDD0BC;padding:6px 8px;vertical-align:middle}
 .pdf-items tr:nth-child(even) td{background:#FAF6EF}
 .pdf-items .r{text-align:right}
 .pdf-items .c{text-align:center}
-.pdf-items .brand-txt{font-size:8pt;color:#8C7B6B;display:block;margin-top:1px}
+.pdf-items .brand-txt{font-size:8pt;color:#8C7B6B;display:block;margin-top:1px;font-weight:400}
 .pdf-items .amt-cell{font-weight:700;color:#6B4C2A;text-align:right}
 
-/* 소계/합계 */
 .pdf-subtotals{width:100%;border-collapse:collapse;margin-bottom:16px;font-size:9pt}
 .pdf-subtotals td{padding:5px 10px;border:0.5px solid #DDD0BC}
-.pdf-subtotals .lbl{background:#F5F0E8;color:#8C7B6B;text-align:right;width:82%}
-.pdf-subtotals .val{text-align:right;font-weight:600;white-space:nowrap}
+.pdf-subtotals .lbl{background:#F5F0E8;color:#8C7B6B;text-align:right;width:82%;font-weight:500}
+.pdf-subtotals .val{text-align:right;font-weight:700;white-space:nowrap}
 .pdf-subtotals tr.grand td{background:#3B2A1A;color:#FDFAF6;font-weight:800;font-size:11pt}
 .pdf-subtotals tr.gold td{background:#2A1800;color:#C8922A;font-weight:800;font-size:11pt}
 
-/* 비고 */
-.pdf-note{font-size:8.5pt;color:#8C7B6B;margin-bottom:16px;padding:8px 12px;border-left:3px solid var(--gold,#C8922A);background:#FAF6EF;border-radius:0 4px 4px 0}
+.pdf-note{font-size:8.5pt;color:#8C7B6B;margin-bottom:16px;padding:8px 12px;border-left:3px solid #C8922A;background:#FAF6EF;border-radius:0 4px 4px 0;font-weight:400;white-space:pre-line}
 
-/* 결제조건 */
 .pdf-cond-box{border:1px solid #DDD0BC;border-radius:8px;overflow:hidden;margin-bottom:20px}
 .pdf-cond-header{background:linear-gradient(135deg,#2C1A0E,#3B2A1A);color:#C8A87A;font-weight:700;font-size:10pt;padding:8px 14px}
 .pdf-cond-row{padding:7px 14px;font-size:9pt;border-bottom:0.5px solid #EDE0CC;display:flex;gap:8px;align-items:center}
 .pdf-cond-row:last-child{border-bottom:none;background:#F0E8D8;color:#3B2A1A;font-weight:700}
-.pdf-cond-row .cn{color:#C8922A;font-weight:700;min-width:18px;flex-shrink:0}
+.pdf-cond-row .cn{color:#C8922A;font-weight:800;min-width:18px;flex-shrink:0}
 
-/* 서명란 */
 .pdf-sign{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .pdf-sign-box{border:0.5px solid #DDD0BC;border-radius:8px;padding:12px 16px;min-height:100px;background:#FDFAF6}
-.pdf-sign-box .sign-title{font-size:10pt;font-weight:700;color:#3B2A1A;border-bottom:2px solid #C8922A;padding-bottom:6px;margin-bottom:10px}
-.pdf-sign-box .sign-row{font-size:8.5pt;color:#1E1610;padding:2px 0;display:flex;gap:8px}
-.pdf-sign-box .sign-row .sk{color:#8C7B6B;min-width:52px;flex-shrink:0}
+.pdf-sign-box .sign-title{font-size:10pt;font-weight:800;color:#3B2A1A;border-bottom:2px solid #C8922A;padding-bottom:6px;margin-bottom:10px;letter-spacing:-.3px}
+.pdf-sign-box .sign-row{font-size:8.5pt;color:#1E1610;padding:2px 0;display:flex;gap:8px;font-weight:400}
+.pdf-sign-box .sign-row .sk{color:#8C7B6B;min-width:52px;flex-shrink:0;font-weight:600}
 
 @media print{
   body{background:#fff!important}
@@ -240,7 +203,6 @@ body{background:var(--bg);font-family:'Apple SD Gothic Neo',Arial,sans-serif;col
   <button class="tab-btn" onclick="switchTab('preview')">👁 미리보기 · 저장</button>
 </div>
 
-<!-- 입력 탭 -->
 <div id="tabInput" class="content">
   <div class="section">
     <div class="section-label">문서 정보</div>
@@ -339,7 +301,6 @@ body{background:var(--bg);font-family:'Apple SD Gothic Neo',Arial,sans-serif;col
   <button class="dl-btn" onclick="switchTab('preview')" style="margin-bottom:20px">👁 미리보기 확인</button>
 </div>
 
-<!-- 미리보기 탭 -->
 <div id="tabPreview" class="content" style="display:none">
   <div class="btn-group">
     <button class="dl-btn gold" onclick="saveImage()">🖼 이미지 저장</button>
@@ -498,7 +459,7 @@ function buildPDFHTML(){
     </tr>`;
   }).join('');
   for(let i=validItems.length;i<5;i++)
-    itemRows+=`<tr><td class="c" style="color:#ccc">${i+1}</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>`;
+    itemRows+=`<tr><td class="c" style="color:#ddd">${i+1}</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>`;
 
   const extraRows=extras.filter(ex=>ex.name||parseFloat(ex.amt)).map(ex=>
     `<tr><td colspan="6" style="text-align:right;color:#8C7B6B">${ex.name||'추가비용'}</td><td class="amt-cell">${fmt(parseFloat(ex.amt)||0)}원</td></tr>`
@@ -546,7 +507,7 @@ function buildPDFHTML(){
       <tbody>${itemRows}${extraRows}</tbody>
     </table>
     <table class="pdf-subtotals">${subRows}</table>
-    ${noteText?`<div class="pdf-note">${noteText.replace(/\n/g,'<br>')}</div>`:''}
+    ${noteText?`<div class="pdf-note">${noteText}</div>`:''}
     <div class="pdf-cond-box">
       <div class="pdf-cond-header">결제 조건 및 계좌 안내</div>
       <div class="pdf-cond-row"><span class="cn">①</span>시공일 1주일 전 — ${deposit}</div>
@@ -596,7 +557,7 @@ function saveImage(){
       link.click();
       showToast('🖼 이미지 저장 완료!');
     }).catch(()=>{loading.classList.remove('show');showToast('⚠️ 잠시 후 다시 시도해 주세요');});
-  },300);
+  },500);
 }
 
 function printPDF(){
