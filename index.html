@@ -184,6 +184,12 @@ body{background:var(--bg);font-family:var(--font);color:var(--text);font-size:14
 }
 
 .hangul-box{background:var(--gold-lt);border:1px solid #E8C878;border-radius:8px;padding:10px 14px;margin-bottom:14px;display:flex;align-items:flex-start;gap:10px}
+.total-row.sub-row{padding:6px 16px;background:#FAFAF8}
+.total-row.sub-row .total-label{font-size:12px;color:var(--muted)}
+.total-row.sub-row .sub-val{font-size:13px;color:var(--accent2);font-weight:600}
+.total-row.mid-total{background:var(--accent-lt)}
+.total-row.mid-total .total-label{color:var(--accent2);font-weight:700;font-size:13px}
+.total-row.mid-total .total-value{color:var(--accent);font-size:15px;font-weight:700}
 .hangul-box .hl{font-size:11px;font-weight:700;color:var(--gold);white-space:nowrap;padding-top:1px}
 .hangul-box .hv{font-size:13px;color:var(--accent);font-weight:600;line-height:1.5;word-break:keep-all}
 </style>
@@ -273,8 +279,8 @@ body{background:var(--bg);font-family:var(--font);color:var(--text);font-size:14
     <div class="section-label">결제 조건</div>
     <div class="cond-row">
       <span class="cond-num">①</span>
-      <span>시공일 1주일 전 —</span>
-      <select id="condDeposit">
+      <span>시공일 1주일 전 — <span id="condDepositLabel"></span></span>
+      <select id="condDeposit" onchange="recalc()">
         <option value="자재비 선금 입금">자재비 선금 입금</option>
         <option value="계약금 30% 입금">계약금 30% 입금</option>
         <option value="계약금 50% 입금">계약금 50% 입금</option>
@@ -448,21 +454,28 @@ function renderExtras(){
 function updEx(id,field,v){const ex=extras.find(e=>e.id===id);if(ex)ex[field]=v;recalc();}
 
 function getTotals(){
-  const itemSum=items.reduce((s,it)=>s+Math.round((parseFloat(it.qty)||0)*((parseFloat(it.mat)||0)+(parseFloat(it.labor)||0))),0);
+  const matSum=items.reduce((s,it)=>s+Math.round((parseFloat(it.qty)||0)*(parseFloat(it.mat)||0)),0);
+  const laborSum=items.reduce((s,it)=>s+Math.round((parseFloat(it.qty)||0)*(parseFloat(it.labor)||0)),0);
+  const itemSum=matSum+laborSum;
   const extraSum=Math.round(extras.reduce((s,ex)=>s+(parseFloat(ex.amt)||0),0));
   const subtotal=itemSum+extraSum;
   const vat=Math.round(subtotal*0.1);
   const total=subtotal+vat;
   const advance=Math.round(num('advanceAmt'));
-  return{itemSum,extraSum,subtotal,vat,total,advance,remain:total-advance};
+  return{matSum,laborSum,itemSum,extraSum,subtotal,vat,total,advance,remain:total-advance};
 }
 
 function recalc(){
-  const{itemSum,extraSum,subtotal,vat,total,advance,remain}=getTotals();
+  const{matSum,laborSum,itemSum,extraSum,subtotal,vat,total,advance,remain}=getTotals();
   const isSettle=val('docType')==='정산서';
+  const deposit=document.getElementById('condDeposit').value;
+  const matLabel=deposit==='자재비 선금 입금'
+    ? `자재비 소계 <span style="font-size:11px;color:var(--gold);font-weight:600">(선금 기준)</span>`
+    : '자재비 소계';
   let html=`
-    <div class="total-row"><span class="total-label">품목 소계</span><span class="total-value">${fmt(itemSum)}원</span></div>
-    <div class="total-row"><span class="total-label">추가비용</span><span class="total-value">${fmt(extraSum)}원</span></div>
+    <div class="total-row"><span class="total-label">${matLabel}</span><span class="total-value">${fmt(matSum)}원</span></div>
+    <div class="total-row"><span class="total-label">시공비 소계</span><span class="total-value">${fmt(laborSum)}원</span></div>
+    ${extraSum?`<div class="total-row"><span class="total-label">추가비용</span><span class="total-value">${fmt(extraSum)}원</span></div>`:''}
     <div class="total-row"><span class="total-label">세전 합계</span><span class="total-value">${fmt(subtotal)}원</span></div>
     <div class="total-row"><span class="total-label">부가세 (10%)</span><span class="total-value">${fmt(vat)}원</span></div>
     <div class="total-row main-total"><span class="total-label">세후 ${isSettle?'정산':'견적'}액</span><span class="total-value">${fmt(total)}원</span></div>`;
@@ -481,11 +494,12 @@ function recalc(){
 
 function buildPDFHTML(){
   const isSettle=val('docType')==='정산서';
-  const{itemSum,extraSum,subtotal,vat,total,advance,remain}=getTotals();
+  const{matSum,laborSum,itemSum,extraSum,subtotal,vat,total,advance,remain}=getTotals();
   const deposit=document.getElementById('condDeposit').value;
   const days=document.getElementById('condDays').value;
   const noteText=(document.getElementById('noteText').value||'').trim();
 
+  const{matSum,laborSum}=getTotals();
   const validItems=items.filter(it=>it.name||parseFloat(it.qty));
   let itemRows=validItems.map((it,i)=>{
     const qty=parseFloat(it.qty)||0,mat=parseFloat(it.mat)||0,labor=parseFloat(it.labor)||0;
@@ -508,8 +522,10 @@ function buildPDFHTML(){
     `<tr><td colspan="6" style="text-align:right;color:#8C7B6B">${ex.name||'추가비용'}</td><td class="amt-cell">${fmt(parseFloat(ex.amt)||0)}원</td></tr>`
   ).join('');
 
+  const matLabel=deposit==='자재비 선금 입금'?'자재비 소계  ★ 선금 기준':'자재비 소계';
   let subRows=`
-    <tr><td class="lbl">소  계</td><td class="val">${fmt(itemSum)}원</td></tr>
+    <tr><td class="lbl" style="${deposit==='자재비 선금 입금'?'color:#C8922A;font-weight:700':''}">${matLabel}</td><td class="val" style="${deposit==='자재비 선금 입금'?'color:#C8922A;font-weight:700':''}">${fmt(matSum)}원</td></tr>
+    <tr><td class="lbl">시공비 소계</td><td class="val">${fmt(laborSum)}원</td></tr>
     ${extraSum?`<tr><td class="lbl">추가비용</td><td class="val">${fmt(extraSum)}원</td></tr>`:''}
     <tr><td class="lbl">세전 합계</td><td class="val">${fmt(subtotal)}원</td></tr>
     <tr><td class="lbl">부가세 (10%)</td><td class="val">${fmt(vat)}원</td></tr>
@@ -553,7 +569,7 @@ function buildPDFHTML(){
     ${noteText?`<div class="pdf-note">${noteText}</div>`:''}
     <div class="pdf-cond-box">
       <div class="pdf-cond-header">결제 조건 및 계좌 안내</div>
-      <div class="pdf-cond-row"><span class="cn">①</span>시공일 1주일 전 — ${deposit}</div>
+      <div class="pdf-cond-row"><span class="cn">①</span>시공일 1주일 전 — ${deposit==='자재비 선금 입금'?`자재비 선금 입금 (${fmt(matSum)}원)`:deposit}</div>
       <div class="pdf-cond-row"><span class="cn">②</span>시공 완료 후 ${days}일 이내 — 잔금 전액 입금</div>
       <div class="pdf-cond-row"><span class="cn">★</span>입금계좌 : 국민은행 &nbsp; 758601-00-101548 &nbsp; (주)호인</div>
     </div>
