@@ -56,6 +56,7 @@ body{background:var(--bg);font-family:var(--font);color:var(--text);font-size:14
 .items-table input{border:none;background:transparent;width:100%;font-size:13px;padding:4px 5px;color:var(--text);text-align:inherit;font-family:var(--font);outline:none;border-radius:4px}
 .items-table input:focus{background:var(--gold-lt)}
 .items-table .num{text-align:right}
+.items-table td:nth-child(4) input,.items-table td:nth-child(5) input,.items-table td:nth-child(6) input{text-align:right}
 .name-cell{display:flex;flex-direction:column;gap:1px}
 .name-cell input.brand-inp{font-size:11px;color:var(--muted);padding:2px 5px}
 .spec-cell{display:flex;align-items:center;gap:2px;white-space:nowrap}
@@ -88,7 +89,7 @@ body{background:var(--bg);font-family:var(--font);color:var(--text);font-size:14
 .total-row.mid-total .total-value{color:var(--accent);font-size:15px;font-weight:700}
 .total-row.main-total{background:var(--accent)}
 .total-row.gold-row{background:#2A1800}
-.total-label{font-size:13px;color:var(--muted);font-weight:500}
+.total-label{font-size:13px;color:var(--muted);font-weight:500;min-width:120px}
 .total-row.main-total .total-label,.total-row.gold-row .total-label{color:rgba(253,250,246,.65);font-weight:600}
 .total-value{font-size:15px;font-weight:700;color:var(--text)}
 .total-row.main-total .total-value{color:#FDFAF6;font-size:18px;font-weight:800}
@@ -584,7 +585,7 @@ function upd(id,field,v){
 function calcAmt(it){
   const qty=parseFloat(it.qty)||0,mat=parseFloat(it.mat)||0,labor=parseFloat(it.labor)||0;
   if(!qty)return '—';
-  return fmt(Math.round(qty*(mat+labor)))+'원';
+  return fmt(Math.round(qty*(mat+labor)));
 }
 
 // ── 추가비용
@@ -651,19 +652,19 @@ function recalc(){
   let html=`
     <div class="total-row sub-row" style="${matHighlight?'background:var(--gold-lt);border-left:3px solid var(--gold)':''}">
       <span class="total-label" style="${matHighlight?'color:var(--gold);font-weight:700':''}">· 자재비 소계${matHighlight?' ★':''}</span>
-      <span class="sub-val" style="${matHighlight?'color:var(--gold);font-weight:800':''}">${fmt(matSum)}원</span>
+      <span class="sub-val" style="${matHighlight?'color:var(--gold);font-weight:800':''}">${fmt(matSum)}</span>
     </div>
     <div class="total-row sub-row">
       <span class="total-label">· 시공비 소계</span>
-      <span class="sub-val">${fmt(laborSum)}원</span>
+      <span class="sub-val">${fmt(laborSum)}</span>
     </div>
-    ${extraSum?`<div class="total-row sub-row"><span class="total-label">· 추가비용</span><span class="sub-val">${fmt(extraSum)}원</span></div>`:''}
-    <div class="total-row mid-total"><span class="total-label">세전 합계</span><span class="total-value">${fmt(subtotal)}원</span></div>
-    <div class="total-row"><span class="total-label">부가세 (10%)</span><span class="total-value">${fmt(vat)}원</span></div>
-    <div class="total-row main-total"><span class="total-label">세후 ${isSettle?'정산':'견적'}액</span><span class="total-value">${fmt(total)}원</span></div>`;
+    ${extraSum?`<div class="total-row sub-row"><span class="total-label">· 추가비용</span><span class="sub-val">${fmt(extraSum)}</span></div>`:''}
+    <div class="total-row mid-total"><span class="total-label">세전 합계</span><span class="total-value">${fmt(subtotal)}</span></div>
+    <div class="total-row"><span class="total-label">부가세 (10%)</span><span class="total-value">${fmt(vat)}</span></div>
+    <div class="total-row main-total"><span class="total-label">세후 ${isSettle?'정산':'견적'}액</span><span class="total-value">${fmt(total)}</span></div>`;
   if(isSettle){
-    html+=`<div class="total-row"><span class="total-label">선금</span><span class="total-value">${fmt(advance)}원</span></div>`;
-    html+=`<div class="total-row gold-row"><span class="total-label">잔금 (청구액)</span><span class="total-value">${fmt(remain)}원</span></div>`;
+    html+=`<div class="total-row"><span class="total-label">선금</span><span class="total-value">${fmt(advance)}</span></div>`;
+    html+=`<div class="total-row gold-row"><span class="total-label">잔금 (청구액)</span><span class="total-value">${fmt(remain)}</span></div>`;
   }
   document.getElementById('totalsBox').innerHTML=html;
 
@@ -694,27 +695,27 @@ function buildPDFHTML(){
       <td class="r">${qty||''}</td>
       <td class="r">${mat?fmt(mat):''}</td>
       <td class="r">${labor?fmt(labor):''}</td>
-      <td class="amt-cell">${amt?fmt(amt)+'원':''}</td>
+      <td class="amt-cell">${amt?fmt(amt):''}</td>
     </tr>`;
   }).join('');
   for(let i=validItems.length;i<5;i++)
     itemRows+=`<tr><td class="c" style="color:#ddd">${i+1}</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>`;
 
   const extraRows=extras.filter(ex=>ex.name||parseFloat(ex.amt)).map(ex=>
-    `<tr class="sub"><td class="lbl">· ${ex.name||'추가비용'}</td><td class="val">${fmt(parseFloat(ex.amt)||0)}원</td></tr>`
+    `<tr class="sub"><td class="lbl">· ${ex.name||'추가비용'}</td><td class="val">${fmt(parseFloat(ex.amt)||0)}</td></tr>`
   ).join('');
 
   const matHighlight=deposit==='자재비 선금 입금';
   let subRows=`
-    <tr class="sub"><td class="lbl" style="${matHighlight?'color:#C8922A;font-weight:700':''}">· 자재비 소계${matHighlight?' ★':''}</td><td class="val" style="${matHighlight?'color:#C8922A;font-weight:700':''}">${fmt(matSum)}원</td></tr>
-    <tr class="sub"><td class="lbl">· 시공비 소계</td><td class="val">${fmt(laborSum)}원</td></tr>
+    <tr class="sub"><td class="lbl" style="${matHighlight?'color:#C8922A;font-weight:700':''}">· 자재비 소계${matHighlight?' ★':''}</td><td class="val" style="${matHighlight?'color:#C8922A;font-weight:700':''}">${fmt(matSum)}</td></tr>
+    <tr class="sub"><td class="lbl">· 시공비 소계</td><td class="val">${fmt(laborSum)}</td></tr>
     ${extraRows}
-    <tr class="mid"><td class="lbl">세전 합계</td><td class="val">${fmt(subtotal)}원</td></tr>
-    <tr><td class="lbl">부가세 (10%)</td><td class="val">${fmt(vat)}원</td></tr>
-    <tr class="grand"><td class="lbl" style="color:rgba(253,250,246,.8)">세후 ${isSettle?'정산':'견적'}액 합계</td><td class="val">${fmt(total)}원</td></tr>`;
+    <tr class="mid"><td class="lbl">세전 합계</td><td class="val">${fmt(subtotal)}</td></tr>
+    <tr><td class="lbl">부가세 (10%)</td><td class="val">${fmt(vat)}</td></tr>
+    <tr class="grand"><td class="lbl" style="color:rgba(253,250,246,.8)">세후 ${isSettle?'정산':'견적'}액 합계</td><td class="val">${fmt(total)}</td></tr>`;
   if(isSettle) subRows+=`
-    <tr><td class="lbl">선  금</td><td class="val">${fmt(advance)}원</td></tr>
-    <tr class="gold"><td class="lbl" style="color:rgba(200,146,42,.7)">잔  금 (청구액)</td><td class="val">${fmt(remain)}원</td></tr>`;
+    <tr><td class="lbl">선  금</td><td class="val">${fmt(advance)}</td></tr>
+    <tr class="gold"><td class="lbl" style="color:rgba(200,146,42,.7)">잔  금 (청구액)</td><td class="val">${fmt(remain)}</td></tr>`;
 
   // 결제조건 행
   const cond1 = noDeposit
