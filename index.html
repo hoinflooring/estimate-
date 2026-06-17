@@ -87,10 +87,10 @@ body{background:var(--bg);font-family:var(--font);color:var(--text);font-size:14
 .total-row.mid-total{background:var(--accent-lt)}
 .total-row.mid-total .total-label{color:var(--accent2);font-weight:700;font-size:13px}
 .total-row.mid-total .total-value{color:var(--accent);font-size:15px;font-weight:700}
-.total-row.main-total{background:var(--accent)}
-.total-row.gold-row{background:#2A1800}
-.total-label{font-size:13px;color:var(--muted);font-weight:500;min-width:120px}
-.total-row.main-total .total-label,.total-row.gold-row .total-label{color:rgba(253,250,246,.65);font-weight:600}
+.total-row.main-total{background:var(--accent);display:flex;align-items:center;padding:12px 16px}
+.total-row.gold-row{background:#2A1800;padding:12px 16px}
+.total-label{font-size:13px;color:var(--muted);font-weight:500}
+.total-row.main-total .total-label,.total-row.gold-row .total-label{color:rgba(253,250,246,.65);font-weight:600;white-space:nowrap}
 .total-value{font-size:15px;font-weight:700;color:var(--text)}
 .total-row.main-total .total-value{color:#FDFAF6;font-size:18px;font-weight:800}
 .total-row.gold-row .total-value{color:var(--gold);font-size:18px;font-weight:800}
@@ -555,7 +555,7 @@ function renderItems(){
   items.forEach((it,idx)=>{
     const tr=document.createElement('tr');
     tr.innerHTML=`
-      <td style="text-align:center;color:var(--muted);font-size:11px">${idx+1}</td>
+      <td style="text-align:center;color:var(--muted);font-size:11px;vertical-align:middle">${idx+1}</td>
       <td><div class="name-cell">
         <input value="${it.name||''}" placeholder="제품명" oninput="upd('${it.id}','name',this.value)">
         <input class="brand-inp" value="${it.brand||''}" placeholder="브랜드" oninput="upd('${it.id}','brand',this.value)">
@@ -661,10 +661,10 @@ function recalc(){
     ${extraSum?`<div class="total-row sub-row"><span class="total-label">· 추가비용</span><span class="sub-val">${fmt(extraSum)}</span></div>`:''}
     <div class="total-row mid-total"><span class="total-label">세전 합계</span><span class="total-value">${fmt(subtotal)}</span></div>
     <div class="total-row"><span class="total-label">부가세 (10%)</span><span class="total-value">${fmt(vat)}</span></div>
-    <div class="total-row main-total"><span class="total-label">세후 ${isSettle?'정산':'견적'}액</span><span class="total-value">${fmt(total)}</span></div>`;
+    <div class="total-row main-total"><span class="total-label">세후 ${isSettle?'정산':'견적'}액</span><span class="total-value">₩${fmt(total)}</span></div>`;
   if(isSettle){
     html+=`<div class="total-row"><span class="total-label">선금</span><span class="total-value">${fmt(advance)}</span></div>`;
-    html+=`<div class="total-row gold-row"><span class="total-label">잔금 (청구액)</span><span class="total-value">${fmt(remain)}</span></div>`;
+    html+=`<div class="total-row gold-row"><span class="total-label">잔금 (청구액)</span><span class="total-value">₩${fmt(remain)}</span></div>`;
   }
   document.getElementById('totalsBox').innerHTML=html;
 
@@ -712,10 +712,10 @@ function buildPDFHTML(){
     ${extraRows}
     <tr class="mid"><td class="lbl">세전 합계</td><td class="val">${fmt(subtotal)}</td></tr>
     <tr><td class="lbl">부가세 (10%)</td><td class="val">${fmt(vat)}</td></tr>
-    <tr class="grand"><td class="lbl" style="color:rgba(253,250,246,.8)">세후 ${isSettle?'정산':'견적'}액 합계</td><td class="val">${fmt(total)}</td></tr>`;
+    <tr class="grand"><td class="lbl" style="color:rgba(253,250,246,.8)">세후 ${isSettle?'정산':'견적'}액 합계</td><td class="val">₩${fmt(total)}</td></tr>`;
   if(isSettle) subRows+=`
     <tr><td class="lbl">선  금</td><td class="val">${fmt(advance)}</td></tr>
-    <tr class="gold"><td class="lbl" style="color:rgba(200,146,42,.7)">잔  금 (청구액)</td><td class="val">${fmt(remain)}</td></tr>`;
+    <tr class="gold"><td class="lbl" style="color:rgba(200,146,42,.7)">잔  금 (청구액)</td><td class="val">₩${fmt(remain)}</td></tr>`;
 
   // 결제조건 행
   const cond1 = noDeposit
