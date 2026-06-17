@@ -19,9 +19,9 @@
 body{background:var(--bg);font-family:var(--font);color:var(--text);font-size:14px;line-height:1.5}
 
 /* 헤더 */
-.app-header{background:linear-gradient(135deg,#2C1A0E 0%,#3B2A1A 60%,#4A3320 100%);padding:12px 20px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.35)}
+.app-header{background:linear-gradient(135deg,#2C1A0E 0%,#3B2A1A 60%,#4A3320 100%);padding:12px 20px;display:flex;align-items:center;gap:6px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.35)}
 .header-logo{height:72px;width:auto;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 2px 6px rgba(0,0,0,.5))}
-.header-info{flex:1}
+.header-info{flex:1;margin-left:-4px}
 .brand-name{font-size:24px;font-weight:800;color:#FDFAF6;letter-spacing:-0.5px;line-height:1.1}
 .brand-sub{font-size:10px;color:#C8A87A;margin-top:2px;letter-spacing:.05em;font-weight:400}
 .header-contacts{display:flex;flex-direction:column;align-items:flex-end;gap:3px}
@@ -61,14 +61,14 @@ body{background:var(--bg);font-family:var(--font);color:var(--text);font-size:14
 .name-cell input.brand-inp{font-size:11px;color:var(--muted);padding:2px 5px}
 .spec-cell{display:flex;align-items:center;gap:2px;white-space:nowrap;justify-content:center}
 .spec-cell input{width:36px!important;text-align:center;padding:4px 2px!important}
-.spec-cell input.spec-first{width:46px!important}
+.spec-cell input.spec-first{width:46px!important;text-align:center!important}
 .spec-sep{font-size:11px;color:var(--muted);flex-shrink:0;font-weight:600}
 .amt-td{font-weight:700;color:var(--accent2);text-align:right;font-size:13px;padding-right:6px!important;white-space:nowrap}
 .del-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:15px;padding:3px 6px;border-radius:4px}
 .del-btn:hover{color:var(--danger);background:#FEF0EE}
 
 /* 소계/합계 행 */
-.items-table .row-extra td{background:#FAF6EF;border-bottom:1px solid var(--border)}
+.items-table .row-extra td{background:#FAF6EF;border-bottom:1px solid var(--border);padding:6px 3px}
 .items-table .row-sub td{background:#FAFAF8;border-bottom:1px solid var(--border)}
 .items-table .row-sub .s-lbl{text-align:right;color:var(--muted);font-size:12px;padding-right:8px;font-family:var(--font)}
 .items-table .row-sub .s-val{text-align:right;color:var(--accent2);font-size:13px;font-weight:600;padding-right:6px;white-space:nowrap}
@@ -212,6 +212,11 @@ body{background:var(--bg);font-family:var(--font);color:var(--text);font-size:14
   .pdf-wrap{width:100%;padding:8mm 10mm}
   @page{size:A4;margin:0}
 }
+
+/* 숫자 입력 스피너 화살표 제거 */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+input[type="number"]{-moz-appearance:textfield}
 </style>
 </head>
 <body>
@@ -522,7 +527,7 @@ function renderClientList() {
 
 // 품목
 function addItem() {
-  items.push({id:Date.now()+'_'+Math.random(),name:'',brand:'',s1:'',s2:'165',s3:'1200',qty:'',mat:'',labor:''});
+  items.push({id:Date.now()+'_'+Math.random(),name:'',brand:'',s1:'10',s2:'165',s3:'1200',qty:'',mat:'',labor:''});
   renderItems();
 }
 function removeItem(id) { items = items.filter(function(i) { return i.id !== id; }); renderItems(); }
@@ -554,19 +559,19 @@ function renderItems() {
     const specTd = document.createElement('td');
     const specDiv = document.createElement('div');
     specDiv.className = 'spec-cell';
-    const s1 = document.createElement('input'); s1.className='spec-first'; s1.value=it.s1||''; s1.placeholder='10';
+    const s1 = document.createElement('input'); s1.className='spec-first'; s1.value=it.s1; s1.placeholder='10';
     s1.dataset.id=it.id; s1.dataset.field='s1'; s1.addEventListener('input',function(){ upd(this.dataset.id,this.dataset.field,this.value); });
     const sep1 = document.createElement('span'); sep1.className='spec-sep'; sep1.textContent='×';
-    const s2 = document.createElement('input'); s2.type='number'; s2.value=it.s2||'165';
+    const s2 = document.createElement('input'); s2.type='number'; s2.value=it.s2;
     s2.dataset.id=it.id; s2.dataset.field='s2'; s2.addEventListener('input',function(){ upd(this.dataset.id,this.dataset.field,this.value); });
     const sep2 = document.createElement('span'); sep2.className='spec-sep'; sep2.textContent='×';
-    const s3 = document.createElement('input'); s3.type='number'; s3.value=it.s3||'1200';
+    const s3 = document.createElement('input'); s3.type='number'; s3.value=it.s3;
     s3.dataset.id=it.id; s3.dataset.field='s3'; s3.addEventListener('input',function(){ upd(this.dataset.id,this.dataset.field,this.value); });
     [s1,sep1,s2,sep2,s3].forEach(function(el){ specDiv.appendChild(el); }); specTd.appendChild(specDiv);
 
     function makeNumTd(field, val2) {
       const td = document.createElement('td'); td.className='num';
-      const inp = document.createElement('input'); inp.type='number'; inp.value=val2||''; inp.placeholder='0';
+      const inp = document.createElement('input'); inp.type='number'; inp.value=val2; inp.placeholder='0';
       inp.dataset.id=it.id; inp.dataset.field=field;
       inp.addEventListener('input',function(){ upd(this.dataset.id,this.dataset.field,this.value); });
       td.appendChild(inp); return td;
@@ -615,7 +620,7 @@ function renderExtras() {
     td1.colSpan = 5;
     td1.style.cssText = 'text-align:right;padding-right:8px;color:var(--muted);font-size:12px';
     const nameInp = document.createElement('input');
-    nameInp.style.cssText = 'width:100%;border:none;background:transparent;font-family:var(--font);color:var(--muted);outline:none;text-align:right;font-size:12px';
+    nameInp.style.cssText = 'width:100%;border:none;background:transparent;font-family:var(--font);color:var(--text);outline:none;text-align:right;font-size:13px;position:relative;z-index:1;pointer-events:auto;cursor:text';
     nameInp.value = ex.name||''; nameInp.placeholder = '항목명 (예: 샌딩비)';
     nameInp.dataset.id = ex.id; nameInp.dataset.field = 'name';
     nameInp.addEventListener('input', function(){ updEx(this.dataset.id, this.dataset.field, this.value); });
@@ -625,7 +630,7 @@ function renderExtras() {
     td2.style.cssText = 'text-align:right;padding-right:6px';
     const amtInp = document.createElement('input');
     amtInp.type = 'number';
-    amtInp.style.cssText = 'width:100%;border:none;background:transparent;font-family:var(--font);text-align:right;outline:none;color:var(--accent2);font-weight:600;font-size:13px';
+    amtInp.style.cssText = 'width:100%;border:none;background:transparent;font-family:var(--font);text-align:right;outline:none;color:var(--accent2);font-weight:600;font-size:13px;position:relative;z-index:1;pointer-events:auto;cursor:text';
     amtInp.value = ex.amt||''; amtInp.placeholder = '0';
     amtInp.dataset.id = ex.id; amtInp.dataset.field = 'amt';
     amtInp.addEventListener('input', function(){ updEx(this.dataset.id, this.dataset.field, this.value); });
