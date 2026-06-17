@@ -64,6 +64,28 @@ body{background:var(--bg);font-family:var(--font);color:var(--text);font-size:14
 .spec-cell input.spec-first{width:46px!important}
 .spec-sep{font-size:11px;color:var(--muted);flex-shrink:0;font-weight:600}
 .amt-td{font-weight:700;color:var(--accent2);text-align:right;font-size:13px;padding:0 6px!important;white-space:nowrap}
+/* 소계/합계 행 */
+.items-table .row-sub td{background:#FAFAF8;border-bottom:1px solid var(--border)}
+.items-table .row-sub .lbl{text-align:right;color:var(--muted);font-size:12px;padding-right:8px;font-family:var(--font)}
+.items-table .row-sub .val{text-align:right;color:var(--accent2);font-size:13px;font-weight:600;padding-right:6px;font-family:var(--font);white-space:nowrap}
+.items-table .row-sub-gold td{background:var(--gold-lt)}
+.items-table .row-sub-gold .lbl{color:var(--gold);font-weight:700}
+.items-table .row-sub-gold .val{color:var(--gold);font-weight:800}
+.items-table .row-mid td{background:var(--accent-lt);border-bottom:1px solid var(--border)}
+.items-table .row-mid .lbl{text-align:right;color:var(--accent2);font-weight:700;font-size:13px;padding-right:8px;font-family:var(--font)}
+.items-table .row-mid .val{text-align:right;color:var(--accent);font-size:15px;font-weight:700;padding-right:6px;font-family:var(--font);white-space:nowrap}
+.items-table .row-grand td{background:var(--accent)}
+.items-table .row-grand .lbl{text-align:right;color:rgba(253,250,246,.7);font-weight:700;font-size:14px;padding-right:8px;font-family:var(--font);white-space:nowrap}
+.items-table .row-grand .val{text-align:right;color:#FDFAF6;font-size:18px;font-weight:800;padding-right:6px;font-family:var(--font);white-space:nowrap}
+.items-table .row-gold td{background:#2A1800}
+.items-table .row-gold .lbl{text-align:right;color:rgba(184,150,62,.7);font-weight:700;font-size:14px;padding-right:8px;font-family:var(--font);white-space:nowrap}
+.items-table .row-gold .val{text-align:right;color:var(--gold);font-size:18px;font-weight:800;padding-right:6px;font-family:var(--font);white-space:nowrap}
+.items-table .row-sep td{height:4px;background:transparent;padding:0;border:none}
+.items-table .row-extra td{background:#FAFAF8;border-bottom:1px solid var(--border)}
+.items-table .row-extra .ex-name{color:var(--muted);font-size:12px;text-align:right;padding-right:8px;font-family:var(--font)}
+.items-table .row-extra .ex-inp{padding:3px 4px;font-size:12px}
+.items-table .row-extra .ex-val{text-align:right;color:var(--accent2);font-size:13px;font-weight:600;padding-right:6px;white-space:nowrap;font-family:var(--font)}
+.items-table .row-extra .ex-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:13px;padding:2px 4px}
 .del-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:15px;padding:3px 6px;border-radius:4px}
 .del-btn:hover{color:var(--danger);background:#FEF0EE}
 .add-item-btn{width:100%;margin-top:10px;padding:9px;border:1.5px dashed var(--border);border-radius:7px;background:none;color:var(--muted);font-size:13px;cursor:pointer;font-family:var(--font);transition:.15s;font-weight:500}
@@ -84,6 +106,26 @@ body{background:var(--bg);font-family:var(--font);color:var(--text);font-size:14
 .total-row.sub-row{padding:6px 16px;background:#FAFAF8}
 .total-row.sub-row .total-label{font-size:12px;color:var(--muted)}
 .total-row.sub-row .sub-val{font-size:13px;color:var(--accent2);font-weight:600}
+/* 합계 테이블 - 품목 테이블과 열 너비 일치 */
+.totals-table{width:100%;border-collapse:collapse}
+.totals-table td{padding:6px 5px;font-family:var(--font)}
+.totals-table .t-label{color:var(--muted);font-size:12px;text-align:right;padding-right:8px}
+.totals-table .t-val{font-size:13px;font-weight:600;color:var(--accent2);text-align:right;white-space:nowrap}
+.totals-table tr.t-sub td{background:#FAFAF8}
+.totals-table tr.t-sub-gold td{background:var(--gold-lt)}
+.totals-table tr.t-sub-gold .t-label{color:var(--gold);font-weight:700}
+.totals-table tr.t-sub-gold .t-val{color:var(--gold);font-weight:800}
+.totals-table tr.t-mid td{background:var(--accent-lt)}
+.totals-table tr.t-mid .t-label{color:var(--accent2);font-weight:700;font-size:13px}
+.totals-table tr.t-mid .t-val{color:var(--accent);font-size:15px;font-weight:700}
+.totals-table tr.t-grand td{background:var(--accent)}
+.totals-table tr.t-grand .t-label{color:rgba(253,250,246,.65);font-weight:700;font-size:14px;white-space:nowrap}
+.totals-table tr.t-grand .t-val{color:#FDFAF6;font-size:18px;font-weight:800}
+.totals-table tr.t-gold td{background:#2A1800}
+.totals-table tr.t-gold .t-label{color:rgba(184,150,62,.7);font-weight:700;font-size:14px;white-space:nowrap}
+.totals-table tr.t-gold .t-val{color:var(--gold);font-size:18px;font-weight:800}
+.totals-table tr.t-sep td{height:5px;background:transparent;padding:0}
+.totals-table tr.t-sub td,.totals-table tr.t-sub-gold td{border-bottom:1px solid var(--border)}
 .total-row.mid-total{background:var(--accent-lt)}
 .total-row.mid-total .total-label{color:var(--accent2);font-weight:700;font-size:13px}
 .total-row.mid-total .total-value{color:var(--accent);font-size:15px;font-weight:700}
@@ -267,10 +309,10 @@ body{background:var(--bg);font-family:var(--font);color:var(--text);font-size:14
     <div class="field"><label>현장 주소</label><input type="text" id="site"></div>
   </div>
 
-  <div class="section">
-    <div class="section-label">시공 품목</div>
+  <div class="section" style="padding:0;overflow:hidden">
+    <div class="section-label" style="padding:12px 16px 8px;margin-bottom:0">시공 품목 · 합계</div>
     <div class="items-wrap">
-      <table class="items-table">
+      <table class="items-table" id="mainTable">
         <thead><tr>
           <th style="width:22px">#</th>
           <th style="width:115px">품명 / 브랜드</th>
@@ -282,18 +324,15 @@ body{background:var(--bg);font-family:var(--font);color:var(--text);font-size:14
           <th style="width:22px"></th>
         </tr></thead>
         <tbody id="itemsBody"></tbody>
+        <tbody id="extraBody"></tbody>
+        <tbody id="totalsBody"></tbody>
       </table>
     </div>
-    <button class="add-item-btn" onclick="addItem()">+ 품목 추가</button>
+    <div style="padding:8px 12px;border-top:1px dashed var(--border);display:flex;gap:8px;flex-wrap:wrap">
+      <button class="add-item-btn" onclick="addItem()" style="flex:1;margin-top:0">+ 품목 추가</button>
+      <button class="add-extra-btn" onclick="addExtra()" style="border:1.5px dashed var(--border);border-radius:7px;padding:9px 12px;font-size:12px;color:var(--muted)">+ 추가비용</button>
+    </div>
   </div>
-
-  <div class="section">
-    <div class="section-label">추가 비용</div>
-    <div id="extraList"></div>
-    <button class="add-extra-btn" onclick="addExtra()">+ 샌딩비 · 운송비 · 양중비 등 추가</button>
-  </div>
-
-  <div class="totals" id="totalsBox"></div>
 
   <div class="hangul-box" id="hangulBox">
     <span class="hl">한글금액</span>
@@ -590,17 +629,25 @@ function calcAmt(it){
 
 // ── 추가비용
 function addExtra(){extras.push({id:Date.now()+'_e',name:'',amt:''});renderExtras();}
-function removeExtra(id){extras=extras.filter(e=>e.id!==id);renderExtras();}
+function removeExtra(id){extras=extras.filter(e=>e.id!==id);renderExtras();recalc();}
 function renderExtras(){
-  const el=document.getElementById('extraList');el.innerHTML='';
+  const tbody=document.getElementById('extraBody');
+  if(!tbody)return;
+  tbody.innerHTML='';
   extras.forEach(ex=>{
-    const div=document.createElement('div');div.className='extra-row';
-    div.innerHTML=`
-      <input value="${ex.name||''}" placeholder="항목명 (예: 샌딩비)" oninput="updEx('${ex.id}','name',this.value)">
-      <input type="number" class="ex-amt" value="${ex.amt||''}" placeholder="금액" oninput="updEx('${ex.id}','amt',this.value)">
-      <button class="extra-del" onclick="removeExtra('${ex.id}')">✕</button>
-    `;
-    el.appendChild(div);
+    const tr=document.createElement('tr');
+    tr.className='row-extra';
+    tr.innerHTML=`
+      <td></td>
+      <td colspan="5" class="ex-name">
+        <input class="ex-inp" style="width:100%;border:none;background:transparent;font-family:var(--font);color:var(--muted);outline:none;" value="${ex.name||''}" placeholder="항목명 (예: 샌딩비)" oninput="updEx('${ex.id}','name',this.value)">
+      </td>
+      <td class="ex-val">
+        <input type="number" style="width:80px;border:none;background:transparent;font-family:var(--font);text-align:right;outline:none;color:var(--accent2);font-weight:600;" value="${ex.amt||''}" placeholder="0" oninput="updEx('${ex.id}','amt',this.value)">
+      </td>
+      <td><button class="ex-del" onclick="removeExtra('${ex.id}')">✕</button></td>
+    \`;
+    tbody.appendChild(tr);
   });
   recalc();
 }
@@ -649,24 +696,22 @@ function recalc(){
 
   // 합계 박스
   const matHighlight=deposit==='자재비 선금 입금';
-  let html=`
-    <div class="total-row sub-row" style="${matHighlight?'background:var(--gold-lt);border-left:3px solid var(--gold)':''}">
-      <span class="total-label" style="${matHighlight?'color:var(--gold);font-weight:700':''}">· 자재비 소계${matHighlight?' ★':''}</span>
-      <span class="sub-val" style="${matHighlight?'color:var(--gold);font-weight:800':''}">${fmt(matSum)}</span>
-    </div>
-    <div class="total-row sub-row">
-      <span class="total-label">· 시공비 소계</span>
-      <span class="sub-val">${fmt(laborSum)}</span>
-    </div>
-    ${extraSum?`<div class="total-row sub-row"><span class="total-label">· 추가비용</span><span class="sub-val">${fmt(extraSum)}</span></div>`:''}
-    <div class="total-row mid-total"><span class="total-label">세전 합계</span><span class="total-value">${fmt(subtotal)}</span></div>
-    <div class="total-row"><span class="total-label">부가세 (10%)</span><span class="total-value">${fmt(vat)}</span></div>
-    <div class="total-row main-total"><span class="total-label">세후 ${isSettle?'정산':'견적'}액</span><span class="total-value">₩${fmt(total)}</span></div>`;
+  const matRow=matHighlight
+    ?`<tr class="t-sub t-sub-gold"><td class="t-label" colspan="6">· 자재비 소계 ★</td><td class="t-val">${fmt(matSum)}</td></tr>`
+    :`<tr class="t-sub"><td class="t-label" colspan="6">· 자재비 소계</td><td class="t-val">${fmt(matSum)}</td></tr>`;
+  let html=`<table class="totals-table">
+    ${matRow}
+    <tr class="t-sub"><td class="t-label" colspan="6">· 시공비 소계</td><td class="t-val">${fmt(laborSum)}</td></tr>
+    ${extraSum?`<tr class="t-sub"><td class="t-label" colspan="6">· 추가비용</td><td class="t-val">${fmt(extraSum)}</td></tr>`:''}
+    <tr class="t-mid"><td class="t-label" colspan="6">세전 합계</td><td class="t-val">${fmt(subtotal)}</td></tr>
+    <tr class="t-sub"><td class="t-label" colspan="6">부가세 (10%)</td><td class="t-val">${fmt(vat)}</td></tr>
+    <tr class="t-sep"><td colspan="7"></td></tr>
+    <tr class="t-grand"><td class="t-label" colspan="6">세후 ${isSettle?'정산':'견적'}액 합계</td><td class="t-val">₩${fmt(total)}</td></tr>`;
   if(isSettle){
-    html+=`<div class="total-row"><span class="total-label">선금</span><span class="total-value">${fmt(advance)}</span></div>`;
-    html+=`<div class="total-row gold-row"><span class="total-label">잔금 (청구액)</span><span class="total-value">₩${fmt(remain)}</span></div>`;
+    html+=`<tr class="t-sub"><td class="t-label" colspan="6">선금</td><td class="t-val">${fmt(advance)}</td></tr>`;
+    html+=`<tr class="t-gold"><td class="t-label" colspan="6">잔금 (청구액)</td><td class="t-val">₩${fmt(remain)}</td></tr>`;
   }
-  document.getElementById('totalsBox').innerHTML=html;
+  html+=`</table>`;
 
   // 한글금액
   const hbox=document.getElementById('hangulBox');
