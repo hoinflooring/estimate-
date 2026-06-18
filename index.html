@@ -150,11 +150,11 @@ body{background:var(--bg);font-family:var(--font);color:var(--text);font-size:14
 /* PDF */
 #pdfView{display:none}
 .pdf-wrap{width:794px;background:#FDFAF6;padding:36px 44px 40px;font-family:'Pretendard','Apple SD Gothic Neo',sans-serif;font-size:10pt;color:#1E1610}
-.pdf-header{background:linear-gradient(135deg,#2C1A0E 0%,#3B2A1A 60%,#4A3320 100%);display:flex;align-items:center;gap:16px;padding:16px 22px;border-radius:10px 10px 0 0}
-.pdf-header-logo{height:60px;width:auto;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,.4))}
-.pdf-header-brand{flex:1}
-.pdf-header-brand .bname{font-size:22pt;font-weight:800;color:#FDFAF6;letter-spacing:-0.5px;line-height:1.1}
-.pdf-header-brand .bsub{font-size:9pt;color:#C8A87A;margin-top:3px;letter-spacing:.05em;font-weight:400}
+.pdf-header{background:linear-gradient(135deg,#2C1A0E 0%,#3B2A1A 60%,#4A3320 100%);display:flex;align-items:center;gap:0;padding:14px 22px 14px 14px;border-radius:10px 10px 0 0}
+.pdf-header-logo{height:68px;width:auto;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 2px 6px rgba(0,0,0,.4));margin-left:-18px;margin-top:-14px}
+.pdf-header-brand{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:2px;margin-left:-18px}
+.pdf-header-brand .bname{font-size:22pt;font-weight:800;color:#FDFAF6;letter-spacing:-0.5px;line-height:1;margin:0}
+.pdf-header-brand .bsub{font-size:9pt;color:#C8A87A;margin:0;margin-left:5px;letter-spacing:.05em;font-weight:400;line-height:1;align-self:flex-start}
 .pdf-header-contacts{display:flex;flex-direction:column;align-items:flex-end;gap:5px}
 .pdf-header-contacts .tel{font-size:11pt;color:#C8922A;font-weight:700}
 .pdf-header-contacts .mobile{font-size:9.5pt;color:#C8A87A;font-weight:400}
@@ -322,11 +322,20 @@ input[type="number"]{-moz-appearance:textfield}
         <option value="">-- 직접 입력 --</option>
       </select>
     </div>
-    <div class="field"><label>거래처 / 상호</label><input type="text" id="clientName"></div>
-    <div class="field"><label>사업자등록번호</label><input type="text" id="clientBizNum" placeholder="000-00-00000"></div>
-    <div class="field"><label>대표자</label><input type="text" id="clientRep"></div>
-    <div class="field"><label>사업장 주소</label><input type="text" id="clientAddr" placeholder="사업자등록증상 주소"></div>
-    <div class="field"><label>참조 (현장 담당자)</label><input type="text" id="clientContact" placeholder="해당 현장 담당자명"></div>
+    <div class="field"><label>거래처 유형</label>
+      <select id="clientKind" onchange="onClientKindChange()">
+        <option value="biz">사업자</option>
+        <option value="personal">개인</option>
+      </select>
+    </div>
+    <div class="field"><label id="clientNameLabel">거래처 / 상호</label><input type="text" id="clientName"></div>
+    <div id="clientBizFields">
+      <div class="field"><label>사업자등록번호</label><input type="text" id="clientBizNum" placeholder="000-00-00000"></div>
+      <div class="field"><label>대표자</label><input type="text" id="clientRep"></div>
+      <div class="field"><label>사업장 주소</label><input type="text" id="clientAddr" placeholder="사업자등록증상 주소"></div>
+      <div class="field" id="clientContactField"><label>참조 (현장 담당자)</label><input type="text" id="clientContact" placeholder="해당 현장 담당자명"></div>
+    </div>
+    <div class="field" id="clientPersonalPhoneField" style="display:none"><label>연락처</label><input type="text" id="clientPhone" placeholder="010-0000-0000"></div>
     <div class="field"><label>현장명</label><input type="text" id="site" placeholder="예: 천안시 서북구 불당동 ○○아파트 101동"></div>
   </div>
 
@@ -340,10 +349,19 @@ input[type="number"]{-moz-appearance:textfield}
       <div id="clientManagerList" style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px"></div>
       <div style="border-top:1px dashed var(--border);padding-top:14px">
         <div style="font-size:12px;font-weight:700;color:var(--accent2);margin-bottom:8px">새 거래처 등록</div>
-        <div class="field"><label>상호</label><input type="text" id="newClientName"></div>
-        <div class="field"><label>사업자등록번호</label><input type="text" id="newClientBizNum" placeholder="000-00-00000"></div>
-        <div class="field"><label>대표자</label><input type="text" id="newClientRep"></div>
-        <div class="field"><label>사업장 주소 (사업자등록증상)</label><input type="text" id="newClientAddr"></div>
+        <div class="field"><label>유형</label>
+          <select id="newClientKind" onchange="onNewClientKindChange()">
+            <option value="biz">사업자</option>
+            <option value="personal">개인</option>
+          </select>
+        </div>
+        <div class="field"><label id="newClientNameLabel">상호</label><input type="text" id="newClientName"></div>
+        <div id="newClientBizFields">
+          <div class="field"><label>사업자등록번호</label><input type="text" id="newClientBizNum" placeholder="000-00-00000"></div>
+          <div class="field"><label>대표자</label><input type="text" id="newClientRep"></div>
+          <div class="field"><label>사업장 주소 (사업자등록증상)</label><input type="text" id="newClientAddr"></div>
+        </div>
+        <div class="field" id="newClientPersonalPhoneField" style="display:none"><label>연락처</label><input type="text" id="newClientPhone" placeholder="010-0000-0000"></div>
         <button class="dl-btn" style="margin-top:4px" onclick="addClient()">+ 거래처 등록</button>
       </div>
     </div>
@@ -396,7 +414,13 @@ input[type="number"]{-moz-appearance:textfield}
   </div>
 
   <div class="section">
-    <div class="section-label">결제 조건</div>
+    <div class="section-label" style="display:flex;align-items:center;justify-content:space-between">
+      <span>결제 조건</span>
+      <label style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--accent2);font-weight:600;text-transform:none;cursor:pointer">
+        <input type="checkbox" id="showAccount" checked onchange="onShowAccountChange()" style="width:auto;margin:0">
+        입금계좌 표시
+      </label>
+    </div>
     <div class="cond-row" id="condRow1">
       <span class="cond-num">①</span>
       <span>시공일 1주일 전 —</span>
@@ -421,7 +445,7 @@ input[type="number"]{-moz-appearance:textfield}
       </select>
       <span>이내 — 잔금 전액 입금</span>
     </div>
-    <div class="cond-row account-row">
+    <div class="cond-row account-row" id="accountRow">
       <span class="cond-num">★</span>
       <span class="account-txt">입금계좌 &nbsp;</span>
       <span class="account-num" id="accountDisplay">국민은행 &nbsp; 758601-00-101548 &nbsp; (주)호인</span>
@@ -492,6 +516,12 @@ function onBizTypeChange() {
   if (headerName) headerName.textContent = biz.name;
   const accDisplay = document.getElementById('accountDisplay');
   if (accDisplay) accDisplay.innerHTML = biz.bank + ' &nbsp; ' + biz.account + ' &nbsp; ' + biz.accountHolder;
+}
+
+function onShowAccountChange() {
+  const show = document.getElementById('showAccount').checked;
+  const row = document.getElementById('accountRow');
+  if (row) row.style.display = show ? '' : 'none';
 }
 
 function fmt(n) { return Math.round(n||0).toLocaleString('ko-KR'); }
@@ -572,32 +602,56 @@ function renderClientSelect() {
   if (clients.some(function(c) { return c.id === cur; })) sel.value = cur;
 }
 
+function onClientKindChange() {
+  const kind = document.getElementById('clientKind').value;
+  const isPersonal = kind === 'personal';
+  document.getElementById('clientBizFields').style.display = isPersonal ? 'none' : '';
+  document.getElementById('clientPersonalPhoneField').style.display = isPersonal ? '' : 'none';
+  document.getElementById('clientNameLabel').textContent = isPersonal ? '고객명' : '거래처 / 상호';
+}
+
+function onNewClientKindChange() {
+  const kind = document.getElementById('newClientKind').value;
+  const isPersonal = kind === 'personal';
+  document.getElementById('newClientBizFields').style.display = isPersonal ? 'none' : '';
+  document.getElementById('newClientPersonalPhoneField').style.display = isPersonal ? '' : 'none';
+  document.getElementById('newClientNameLabel').textContent = isPersonal ? '고객명' : '상호';
+}
+
 function onClientSelect() {
   const id = document.getElementById('clientSelect').value;
   if (!id) return;
   const c = getClients().find(function(x) { return x.id === id; });
   if (!c) return;
+  document.getElementById('clientKind').value = c.kind||'biz';
+  onClientKindChange();
   document.getElementById('clientName').value = c.name||'';
   document.getElementById('clientBizNum').value = c.bizNum||'';
   document.getElementById('clientRep').value = c.rep||'';
   document.getElementById('clientAddr').value = c.addr||'';
+  document.getElementById('clientPhone').value = c.phone||'';
 }
 
 function addClient() {
+  const kind = document.getElementById('newClientKind').value;
   const name = (document.getElementById('newClientName').value||'').trim();
-  if (!name) { showToast('⚠️ 상호를 입력해 주세요'); return; }
+  if (!name) { showToast(kind === 'personal' ? '⚠️ 고객명을 입력해 주세요' : '⚠️ 상호를 입력해 주세요'); return; }
   const clients = getClients();
   clients.push({
     id: Date.now()+'',
+    kind: kind,
     name: name,
     bizNum: (document.getElementById('newClientBizNum').value||'').trim(),
     rep: (document.getElementById('newClientRep').value||'').trim(),
     addr: (document.getElementById('newClientAddr').value||'').trim(),
+    phone: (document.getElementById('newClientPhone').value||'').trim(),
   });
   saveClients(clients);
-  ['newClientName','newClientBizNum','newClientRep','newClientAddr'].forEach(function(id) {
+  ['newClientName','newClientBizNum','newClientRep','newClientAddr','newClientPhone'].forEach(function(id) {
     document.getElementById(id).value = '';
   });
+  document.getElementById('newClientKind').value = 'biz';
+  onNewClientKindChange();
   renderClientSelect();
   renderClientManagerList();
   showToast('💾 거래처가 등록됐어요!');
@@ -619,10 +673,15 @@ function renderClientManagerList() {
     return;
   }
   el.innerHTML = clients.map(function(c) {
+    const isPersonal = c.kind === 'personal';
+    const badge = isPersonal
+      ? '<span class="badge" style="background:var(--accent-lt);color:var(--accent2)">개인</span>'
+      : '<span class="badge" style="background:#2A1800;color:var(--gold)">사업자</span>';
+    const sub = isPersonal ? (c.phone||'연락처 미입력') : ((c.bizNum||'사업자번호 미입력')+' · '+(c.addr||'주소 미입력'));
     return '<div class="client-card">'
       + '<div class="client-card-info">'
-      + '<div class="client-card-name">'+c.name+'</div>'
-      + '<div class="client-card-sub">'+(c.bizNum||'사업자번호 미입력')+' · '+(c.addr||'주소 미입력')+'</div>'
+      + '<div class="client-card-name">'+c.name+' '+badge+'</div>'
+      + '<div class="client-card-sub">'+sub+'</div>'
       + '</div>'
       + '<button class="action-btn" style="color:var(--danger)" onclick="deleteClient(\''+c.id+'\')">삭제</button>'
       + '</div>';
@@ -644,7 +703,7 @@ function saveDoc() {
     id: currentId || Date.now()+'',
     savedAt: new Date().toISOString(),
     docType: val('docType'), docDate: val('docDate'), workDate: val('workDate'),
-    clientName: val('clientName'), clientBizNum: val('clientBizNum'), clientRep: val('clientRep'), clientAddr: val('clientAddr'), clientContact: val('clientContact'), site: val('site'),
+    clientKind: val('clientKind'), clientName: val('clientName'), clientBizNum: val('clientBizNum'), clientRep: val('clientRep'), clientAddr: val('clientAddr'), clientPhone: val('clientPhone'), clientContact: val('clientContact'), site: val('site'), showAccount: document.getElementById('showAccount').checked,
     items: JSON.parse(JSON.stringify(items)), extras: JSON.parse(JSON.stringify(extras)),
     advanceAmt: val('advanceAmt'), condDeposit: val('condDeposit'), condDays: val('condDays'),
     noteText: document.getElementById('noteText').value, total: getTotals().total, unit: currentUnit, bizType: currentBizType,
@@ -662,10 +721,15 @@ function loadDoc(id) {
   document.getElementById('docType').value = doc.docType||'견적서';
   document.getElementById('docDate').value = doc.docDate||'';
   document.getElementById('workDate').value = doc.workDate||'';
+  document.getElementById('clientKind').value = doc.clientKind||'biz';
+  onClientKindChange();
+  document.getElementById('showAccount').checked = doc.showAccount !== false;
+  onShowAccountChange();
   document.getElementById('clientName').value = doc.clientName||'';
   document.getElementById('clientBizNum').value = doc.clientBizNum||'';
   document.getElementById('clientRep').value = doc.clientRep||'';
   document.getElementById('clientAddr').value = doc.clientAddr||'';
+  document.getElementById('clientPhone').value = doc.clientPhone||'';
   document.getElementById('clientContact').value = doc.clientContact||'';
   document.getElementById('site').value = doc.site||'';
   document.getElementById('advanceAmt').value = doc.advanceAmt||'';
@@ -709,7 +773,11 @@ function newDoc() {
   document.getElementById('bizType').value = 'corp';
   onBizTypeChange();
   document.getElementById('clientSelect').value = '';
-  ['clientName','clientBizNum','clientRep','clientAddr','clientContact','site','advanceAmt'].forEach(function(id) {
+  document.getElementById('clientKind').value = 'biz';
+  onClientKindChange();
+  document.getElementById('showAccount').checked = true;
+  onShowAccountChange();
+  ['clientName','clientBizNum','clientRep','clientAddr','clientPhone','clientContact','site','advanceAmt'].forEach(function(id) {
     document.getElementById(id).value = '';
   });
   document.getElementById('docType').value = '견적서';
@@ -935,6 +1003,8 @@ function recalc() {
 // PDF 빌드
 function buildPDFHTML() {
   const isSettle = val('docType') === '정산서';
+  const isPersonalClient = val('clientKind') === 'personal';
+  const showAccount = document.getElementById('showAccount').checked;
   const biz = BIZ_INFO[currentBizType];
   const T = getTotals();
   const deposit = val('condDeposit');
@@ -993,7 +1063,8 @@ function buildPDFHTML() {
     +'<div class="pdf-doc-title">'+val('docType')+'</div>'
     +'<table class="pdf-info-table">'
     +'<tr><td class="lbl">수  신</td><td>'+val('clientName')+'</td><td class="lbl">날  짜</td><td>'+val('docDate')+'</td></tr>'
-    +'<tr><td class="lbl">참  조</td><td>'+val('clientContact')+'</td><td class="lbl">시공일</td><td>'+val('workDate')+'</td></tr>'
+    +(isPersonalClient ? '' : '<tr><td class="lbl">참  조</td><td>'+val('clientContact')+'</td><td class="lbl">시공일</td><td>'+val('workDate')+'</td></tr>')
+    +(isPersonalClient ? '<tr><td class="lbl">시공일</td><td colspan="3">'+val('workDate')+'</td></tr>' : '')
     +'<tr><td class="lbl">현장명</td><td colspan="3">'+val('site')+'</td></tr>'
     +'</table>'
     +'<div class="pdf-total-hero"><div class="lbl">세후 '+(isSettle?'정산':'견적')+'액</div><div class="val">₩'+fmt(T.total)+'</div></div>'
@@ -1005,9 +1076,9 @@ function buildPDFHTML() {
     +'</table>'
     +(noteText ? '<div class="pdf-note">'+noteText+'</div>' : '')
     +'<div class="pdf-cond-box">'
-    +'<div class="pdf-cond-header">결제 조건 및 계좌 안내</div>'
+    +'<div class="pdf-cond-header">결제 조건'+(showAccount?' 및 계좌 안내':'')+'</div>'
     +cond1
-    +'<div class="pdf-cond-row account"><span class="cn">★</span><span class="atxt">입금계좌 &nbsp;</span><span class="anum">'+biz.bank+' &nbsp; '+biz.account+' &nbsp; '+biz.accountHolder+'</span></div>'
+    +(showAccount ? '<div class="pdf-cond-row account"><span class="cn">★</span><span class="atxt">입금계좌 &nbsp;</span><span class="anum">'+biz.bank+' &nbsp; '+biz.account+' &nbsp; '+biz.accountHolder+'</span></div>' : '')
     +'</div>'
     +'<div class="pdf-sign">'
     +'<div class="pdf-sign-box"><div class="sign-title">견  적  인</div>'
@@ -1018,11 +1089,12 @@ function buildPDFHTML() {
     +'<div class="sign-row"><span class="sk">연락처</span>031-758-1054 / 010-7199-7756</div>'
     +'</div>'
     +'<div class="pdf-sign-box"><div class="sign-title">발  주  처</div>'
-    +'<div class="sign-row"><span class="sk">상  호</span>'+val('clientName')+'</div>'
-    +(val('clientBizNum') ? '<div class="sign-row"><span class="sk">사업자</span>'+val('clientBizNum')+'</div>' : '')
-    +(val('clientRep') ? '<div class="sign-row"><span class="sk">대  표</span>'+val('clientRep')+'</div>' : '')
-    +(val('clientAddr') ? '<div class="sign-row"><span class="sk">주  소</span>'+val('clientAddr')+'</div>' : '')
-    +'<div class="sign-row"><span class="sk">담  당</span>'+val('clientContact')+'</div>'
+    +'<div class="sign-row"><span class="sk">'+(isPersonalClient?'고객명':'상  호')+'</span>'+val('clientName')+'</div>'
+    +(!isPersonalClient && val('clientBizNum') ? '<div class="sign-row"><span class="sk">사업자</span>'+val('clientBizNum')+'</div>' : '')
+    +(!isPersonalClient && val('clientRep') ? '<div class="sign-row"><span class="sk">대  표</span>'+val('clientRep')+'</div>' : '')
+    +(!isPersonalClient && val('clientAddr') ? '<div class="sign-row"><span class="sk">주  소</span>'+val('clientAddr')+'</div>' : '')
+    +(isPersonalClient && val('clientPhone') ? '<div class="sign-row"><span class="sk">연락처</span>'+val('clientPhone')+'</div>' : '')
+    +(isPersonalClient ? '' : '<div class="sign-row"><span class="sk">담  당</span>'+val('clientContact')+'</div>')
 
     +'</div></div>'
     +'</div>';
