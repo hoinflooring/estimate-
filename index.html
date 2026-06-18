@@ -313,10 +313,40 @@ input[type="number"]{-moz-appearance:textfield}
   </div>
 
   <div class="section">
-    <div class="section-label">발주처 정보</div>
+    <div class="section-label" style="display:flex;align-items:center;justify-content:space-between">
+      <span>발주처 정보</span>
+      <button type="button" onclick="openClientManager()" style="font-size:11px;padding:3px 8px;border:1px solid var(--border);border-radius:5px;background:var(--surface);color:var(--accent2);font-family:var(--font);font-weight:600;cursor:pointer">+ 거래처 관리</button>
+    </div>
+    <div class="field"><label>거래처 선택</label>
+      <select id="clientSelect" onchange="onClientSelect()">
+        <option value="">-- 직접 입력 --</option>
+      </select>
+    </div>
     <div class="field"><label>거래처 / 상호</label><input type="text" id="clientName"></div>
+    <div class="field"><label>사업자등록번호</label><input type="text" id="clientBizNum" placeholder="000-00-00000"></div>
+    <div class="field"><label>대표자</label><input type="text" id="clientRep"></div>
     <div class="field"><label>담당자</label><input type="text" id="clientContact"></div>
     <div class="field"><label>현장 주소</label><input type="text" id="site"></div>
+  </div>
+
+  <!-- 거래처 관리 모달 -->
+  <div id="clientManagerOverlay" style="display:none;position:fixed;inset:0;background:rgba(30,22,16,.55);z-index:9990;align-items:center;justify-content:center;padding:16px">
+    <div style="background:var(--surface);border-radius:12px;max-width:480px;width:100%;max-height:85vh;overflow-y:auto;padding:20px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+        <span style="font-size:15px;font-weight:800;color:var(--accent)">거래처 관리</span>
+        <button onclick="closeClientManager()" style="background:none;border:none;font-size:20px;color:var(--muted);cursor:pointer">✕</button>
+      </div>
+      <div id="clientManagerList" style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px"></div>
+      <div style="border-top:1px dashed var(--border);padding-top:14px">
+        <div style="font-size:12px;font-weight:700;color:var(--accent2);margin-bottom:8px">새 거래처 등록</div>
+        <div class="field"><label>상호</label><input type="text" id="newClientName"></div>
+        <div class="field"><label>사업자등록번호</label><input type="text" id="newClientBizNum" placeholder="000-00-00000"></div>
+        <div class="field"><label>대표자</label><input type="text" id="newClientRep"></div>
+        <div class="field"><label>담당자</label><input type="text" id="newClientContact"></div>
+        <div class="field"><label>주소</label><input type="text" id="newClientAddr"></div>
+        <button class="dl-btn" style="margin-top:4px" onclick="addClient()">+ 거래처 등록</button>
+      </div>
+    </div>
   </div>
 
   <!-- 품목 + 소계 통합 테이블 -->
@@ -528,13 +558,95 @@ function onDocTypeChange() {
 function getDocs() { try { return JSON.parse(localStorage.getItem('hoin_docs')||'[]'); } catch(e) { return []; } }
 function saveDocs(docs) { localStorage.setItem('hoin_docs', JSON.stringify(docs)); }
 
+// 거래처 관리
+function getClients() { try { return JSON.parse(localStorage.getItem('hoin_clients')||'[]'); } catch(e) { return []; } }
+function saveClients(clients) { localStorage.setItem('hoin_clients', JSON.stringify(clients)); }
+
+function renderClientSelect() {
+  const clients = getClients();
+  const sel = document.getElementById('clientSelect');
+  if (!sel) return;
+  const cur = sel.value;
+  sel.innerHTML = '<option value="">-- 직접 입력 --</option>'
+    + clients.map(function(c) { return '<option value="'+c.id+'">'+c.name+'</option>'; }).join('');
+  if (clients.some(function(c) { return c.id === cur; })) sel.value = cur;
+}
+
+function onClientSelect() {
+  const id = document.getElementById('clientSelect').value;
+  if (!id) return;
+  const c = getClients().find(function(x) { return x.id === id; });
+  if (!c) return;
+  document.getElementById('clientName').value = c.name||'';
+  document.getElementById('clientBizNum').value = c.bizNum||'';
+  document.getElementById('clientRep').value = c.rep||'';
+  document.getElementById('clientContact').value = c.contact||'';
+  document.getElementById('site').value = c.addr||'';
+}
+
+function addClient() {
+  const name = (document.getElementById('newClientName').value||'').trim();
+  if (!name) { showToast('⚠️ 상호를 입력해 주세요'); return; }
+  const clients = getClients();
+  clients.push({
+    id: Date.now()+'',
+    name: name,
+    bizNum: (document.getElementById('newClientBizNum').value||'').trim(),
+    rep: (document.getElementById('newClientRep').value||'').trim(),
+    contact: (document.getElementById('newClientContact').value||'').trim(),
+    addr: (document.getElementById('newClientAddr').value||'').trim(),
+  });
+  saveClients(clients);
+  ['newClientName','newClientBizNum','newClientRep','newClientContact','newClientAddr'].forEach(function(id) {
+    document.getElementById(id).value = '';
+  });
+  renderClientSelect();
+  renderClientManagerList();
+  showToast('💾 거래처가 등록됐어요!');
+}
+
+function deleteClient(id) {
+  if (!confirm('이 거래처를 삭제할까요?')) return;
+  saveClients(getClients().filter(function(c) { return c.id !== id; }));
+  renderClientSelect();
+  renderClientManagerList();
+}
+
+function renderClientManagerList() {
+  const clients = getClients();
+  const el = document.getElementById('clientManagerList');
+  if (!el) return;
+  if (!clients.length) {
+    el.innerHTML = '<div class="empty-list" style="padding:12px">등록된 거래처가 없어요</div>';
+    return;
+  }
+  el.innerHTML = clients.map(function(c) {
+    return '<div class="client-card">'
+      + '<div class="client-card-info">'
+      + '<div class="client-card-name">'+c.name+'</div>'
+      + '<div class="client-card-sub">'+(c.bizNum||'사업자번호 미입력')+' · '+(c.contact||'담당자 미입력')+'</div>'
+      + '</div>'
+      + '<button class="action-btn" style="color:var(--danger)" onclick="deleteClient(\''+c.id+'\')">삭제</button>'
+      + '</div>';
+  }).join('');
+}
+
+function openClientManager() {
+  renderClientManagerList();
+  document.getElementById('clientManagerOverlay').style.display = 'flex';
+}
+function closeClientManager() {
+  document.getElementById('clientManagerOverlay').style.display = 'none';
+  renderClientSelect();
+}
+
 function saveDoc() {
   const docs = getDocs();
   const doc = {
     id: currentId || Date.now()+'',
     savedAt: new Date().toISOString(),
     docType: val('docType'), docDate: val('docDate'), workDate: val('workDate'),
-    clientName: val('clientName'), clientContact: val('clientContact'), site: val('site'),
+    clientName: val('clientName'), clientBizNum: val('clientBizNum'), clientRep: val('clientRep'), clientContact: val('clientContact'), site: val('site'),
     items: JSON.parse(JSON.stringify(items)), extras: JSON.parse(JSON.stringify(extras)),
     advanceAmt: val('advanceAmt'), condDeposit: val('condDeposit'), condDays: val('condDays'),
     noteText: document.getElementById('noteText').value, total: getTotals().total, unit: currentUnit, bizType: currentBizType,
@@ -553,6 +665,8 @@ function loadDoc(id) {
   document.getElementById('docDate').value = doc.docDate||'';
   document.getElementById('workDate').value = doc.workDate||'';
   document.getElementById('clientName').value = doc.clientName||'';
+  document.getElementById('clientBizNum').value = doc.clientBizNum||'';
+  document.getElementById('clientRep').value = doc.clientRep||'';
   document.getElementById('clientContact').value = doc.clientContact||'';
   document.getElementById('site').value = doc.site||'';
   document.getElementById('advanceAmt').value = doc.advanceAmt||'';
@@ -595,7 +709,8 @@ function newDoc() {
   currentBizType = 'corp';
   document.getElementById('bizType').value = 'corp';
   onBizTypeChange();
-  ['clientName','clientContact','site','advanceAmt'].forEach(function(id) {
+  document.getElementById('clientSelect').value = '';
+  ['clientName','clientBizNum','clientRep','clientContact','site','advanceAmt'].forEach(function(id) {
     document.getElementById(id).value = '';
   });
   document.getElementById('docType').value = '견적서';
@@ -802,7 +917,6 @@ function recalc() {
   let rows =
     '<tr class="'+matCls+'"><td></td><td colspan="5" class="s-lbl">· 자재비 소계'+matStar+'</td><td class="s-val">'+fmt(T.matSum)+'</td><td></td></tr>'
     +'<tr class="row-sub"><td></td><td colspan="5" class="s-lbl">· 시공비 소계</td><td class="s-val">'+fmt(T.laborSum)+'</td><td></td></tr>'
-    +(T.extraSum ? '<tr class="row-sub"><td></td><td colspan="5" class="s-lbl">· 추가비용</td><td class="s-val">'+fmt(T.extraSum)+'</td><td></td></tr>' : '')
     +'<tr class="row-sep"><td colspan="8"></td></tr>'
     +'<tr class="row-mid"><td></td><td colspan="5" class="s-lbl">세전 합계</td><td class="s-val">'+fmt(T.subtotal)+'</td><td></td></tr>'
     +'<tr class="row-sub"><td></td><td colspan="5" class="s-lbl">부가세 (10%)</td><td class="s-val">'+fmt(T.vat)+'</td><td></td></tr>'
@@ -858,7 +972,6 @@ function buildPDFHTML() {
   let subRows =
     '<tr class="'+matCls+'"><td></td><td colspan="5" class="p-lbl">· 자재비 소계'+matStar+'</td><td class="p-val">'+fmt(T.matSum)+'</td></tr>'
     +'<tr class="p-sub"><td></td><td colspan="5" class="p-lbl">· 시공비 소계</td><td class="p-val">'+fmt(T.laborSum)+'</td></tr>'
-    +(T.extraSum ? '<tr class="p-sub"><td></td><td colspan="5" class="p-lbl">· 추가비용</td><td class="p-val">'+fmt(T.extraSum)+'</td></tr>' : '')
     +'<tr class="p-sep"><td colspan="7"></td></tr>'
     +'<tr class="p-mid"><td></td><td colspan="5" class="p-lbl">세전 합계</td><td class="p-val">'+fmt(T.subtotal)+'</td></tr>'
     +'<tr class="p-sub"><td></td><td colspan="5" class="p-lbl">부가세 (10%)</td><td class="p-val">'+fmt(T.vat)+'</td></tr>'
@@ -910,6 +1023,8 @@ function buildPDFHTML() {
     +'</div>'
     +'<div class="pdf-sign-box"><div class="sign-title">발  주  처</div>'
     +'<div class="sign-row"><span class="sk">상  호</span>'+val('clientName')+'</div>'
+    +(val('clientBizNum') ? '<div class="sign-row"><span class="sk">사업자</span>'+val('clientBizNum')+'</div>' : '')
+    +(val('clientRep') ? '<div class="sign-row"><span class="sk">대  표</span>'+val('clientRep')+'</div>' : '')
     +'<div class="sign-row"><span class="sk">담  당</span>'+val('clientContact')+'</div>'
     +'<div class="sign-row"><span class="sk">주  소</span>'+val('site')+'</div>'
     +'<div class="sign-row"><span class="sk">서  명</span></div>'
@@ -964,6 +1079,7 @@ function showToast(msg) {
 
 // 초기화
 renderClientList();
+renderClientSelect();
 addItem();
 recalc();
 </script>
