@@ -923,7 +923,7 @@ function recalc() {
     +'<tr class="row-grand"><td></td><td colspan="5" class="s-lbl">세후 '+(isSettle?'정산':'견적')+'액 합계</td><td class="s-val">₩'+fmt(T.total)+'</td><td></td></tr>';
   if (isSettle) {
     if (T.advance > 0) rows += '<tr class="row-sub"><td></td><td colspan="5" class="s-lbl">선  금</td><td class="s-val">'+fmt(T.advance)+'</td><td></td></tr>';
-    rows += '<tr class="row-gold"><td></td><td colspan="5" class="s-lbl">잔금 (청구액)</td><td class="s-val">₩'+fmt(T.remain)+'</td><td></td></tr>';
+    if (T.advance > 0) rows += '<tr class="row-gold"><td></td><td colspan="5" class="s-lbl">잔금 (청구액)</td><td class="s-val">₩'+fmt(T.remain)+'</td><td></td></tr>';
   }
   document.getElementById('totalsBody').innerHTML = rows;
 
@@ -975,7 +975,7 @@ function buildPDFHTML() {
     +'<tr class="p-grand"><td></td><td colspan="5" class="p-lbl">세후 '+(isSettle?'정산':'견적')+'액 합계</td><td class="p-val">₩'+fmt(T.total)+'</td></tr>';
   if (isSettle) {
     if (T.advance > 0) subRows += '<tr class="p-sub"><td></td><td colspan="5" class="p-lbl">선  금</td><td class="p-val">'+fmt(T.advance)+'</td></tr>';
-    subRows += '<tr class="p-gold"><td></td><td colspan="5" class="p-lbl">잔금 (청구액)</td><td class="p-val">₩'+fmt(T.remain)+'</td></tr>';
+    if (T.advance > 0) subRows += '<tr class="p-gold"><td></td><td colspan="5" class="p-lbl">잔금 (청구액)</td><td class="p-val">₩'+fmt(T.remain)+'</td></tr>';
   }
 
   const cond1 = noDeposit
